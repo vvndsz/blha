@@ -1,2 +1,69 @@
-#bhal!
-fe
+import requests
+import json
+
+BASE_URL = "https://www.google.com"
+
+print("--- Starting Web Requests Demonstration with google.com ---")
+print("-" * 40)
+
+print("\n1. Making a simple GET request to google.com:")
+try:
+    response = requests.get(BASE_URL)
+    response.raise_for_status()
+    print(f"  GET Request successful! Status Code: {response.status_code}")
+    print(f"  Response Content Type: {response.headers.get('Content-Type')}")
+    print(f"  Response Body (first 500 chars):\n  {response.text[:500]}...")
+except requests.exceptions.RequestException as e:
+    print(f"  GET Request failed: {e}")
+
+print("-" * 40)
+
+print("\n2. Making a GET request with query parameters (e.g., search):")
+params = {"q": "python requests library"}
+try:
+    response = requests.get(f"{BASE_URL}/search", params=params)
+    response.raise_for_status()
+    print(f"  GET with params successful! Status Code: {response.status_code}")
+    print(f"  Request URL: {response.url}")
+    print(f"  Response Body (first 500 chars):\n  {response.text[:500]}...")
+except requests.exceptions.RequestException as e:
+    print(f"  GET with params failed: {e}")
+
+print("-" * 40)
+
+print("\n3. Making a POST request (expected to fail on google.com):")
+post_data = {"key": "value"}
+headers = {"Content-Type": "application/json"}
+try:
+    response = requests.post(BASE_URL, json=post_data, headers=headers)
+    response.raise_for_status()
+    print(f"  POST Request successful! Status Code: {response.status_code}")
+    print(f"  Response Body (first 200 chars):\n  {response.text[:200]}...")
+except requests.exceptions.RequestException as e:
+    print(f"  POST Request failed (expected for google.com): {e}")
+
+print("-" * 40)
+
+print("\n4. Making a PUT request (expected to fail on google.com):")
+put_data = {"key": "updated_value"}
+try:
+    response = requests.put(BASE_URL, json=put_data, headers=headers)
+    response.raise_for_status()
+    print(f"  PUT Request successful! Status Code: {response.status_code}")
+    print(f"  Response Body (first 200 chars):\n  {response.text[:200]}...")
+except requests.exceptions.RequestException as e:
+    print(f"  PUT Request failed (expected for google.com): {e}")
+
+print("-" * 40)
+
+print("\n5. Making a DELETE request (expected to fail on google.com):")
+try:
+    response = requests.delete(BASE_URL)
+    response.raise_for_status()
+    print(f"  DELETE Request successful! Status Code: {response.status_code}")
+    print(f"  Response Body (first 200 chars):\n  {response.text[:200]}...")
+except requests.exceptions.RequestException as e:
+    print(f"  DELETE Request failed (expected for google.com): {e}")
+
+print("-" * 40)
+print("--- Web Requests Demonstration Finished ---")
